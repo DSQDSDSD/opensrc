@@ -1,35 +1,30 @@
+-- Exemple d'un script simple d'autoclicker
+
 local inputService = game:GetService("UserInputService")
-
 local clickingEnabled = false
-local clickThread = nil
 
+-- Fonction pour démarrer l'autoclick
 local function startClicking()
-    clickThread = coroutine.create(function()
-        while clickingEnabled do
-            mouse1click()
-            wait(1/100)
-        end
-    end)
-    coroutine.resume(clickThread)
+    while clickingEnabled do
+        -- Simuler un clic ici, par exemple un événement ou une action dans le jeu
+        print("Clique!") -- Remplacez cela par votre logique de clic
+        wait(1/100)  -- Clics à 100 par seconde
+    end
 end
 
+-- Fonction pour arrêter l'autoclick
 local function stopClicking()
     clickingEnabled = false
-    if clickThread then
-        coroutine.resume(clickThread)
-        clickThread = nil
-    end
 end
 
-local function onInputBegan(input, gameProcessedEvent)
+-- Détection de la touche E pour démarrer ou arrêter l'autoclick
+inputService.InputBegan:Connect(function(input, gameProcessedEvent)
     if input.KeyCode == Enum.KeyCode.E then
-        clickingEnabled = not clickingEnabled
         if clickingEnabled then
-            startClicking()
-        else
             stopClicking()
+        else
+            clickingEnabled = true
+            startClicking()
         end
     end
-end
-
-inputService.InputBegan:Connect(onInputBegan)
+end)
